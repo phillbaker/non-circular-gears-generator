@@ -1,4 +1,4 @@
-#!/usr/bin/python2.2
+#!/usr/bin/python
 
 from slfmaker import SLFMaker, SLFMakerSphereTeeth
 from math import sin,cos,pi,sqrt

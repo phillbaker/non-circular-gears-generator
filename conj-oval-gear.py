@@ -1,4 +1,4 @@
-#!/usr/bin/python2.2
+#!/usr/bin/python
 
 from conj_slfmaker import ConjugateSLFMaker, ConjugateSLFMakerSphereTeeth
 from math import sin,cos,pi,sqrt

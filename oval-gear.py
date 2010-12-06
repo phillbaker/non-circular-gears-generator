@@ -69,7 +69,6 @@ class oval (SLFMaker):
         return pi * (self.a+self.b) * (1.0+(3.0 * h)/(10.0+sqrt(4.0-3.0*h)))
 
 e = oval(30, 10, 1.0, 0.15, 2, 0.0625, 0.25, 0.0001)
-
-e.write('ncgear3.slf')
+e.write('ncgear4.slf')
 #for x in range(1,9):
 #    print 2.0*pi/x, e.radiusOfCurvature(2.0*pi/x)

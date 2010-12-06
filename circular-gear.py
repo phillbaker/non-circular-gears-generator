@@ -41,8 +41,9 @@ class circle (SLFMaker):
 
 e = circle(20, 10, 1.0, 0.125, 0.2, 0.001)
 
-import profile
-profile.run("e.write('ncgear2.slf')")
+#import profile
+#profile.run("e.write('ncgear2.slf')")
+e.write('ncgear2.slf')
 #for x in range(1,9):
 #    print 2.0*pi/x, e.radiusOfCurvature(2.0*pi/x)
 

@@ -39,6 +39,8 @@ def toCartesian(r,t):
 
 class SLFMaker:
     def __init__(self, teethCount, ts=5, depth=0.1, tolerance = 0.001):
+        """self.perimeter() needs to be defined.
+        """
         self.depth = depth
         self.teethLoc = []
         self.teethCount = teethCount
@@ -387,6 +389,10 @@ endrender
         dy2 = self.dy2(t)
               
         return ((dx*dx+dy*dy)**1.5) / (dx*dy2-dx2*dy)
+
+    #def perimeter(self):
+    #    "Needs to be overridden."
+    #    return self.oradius*pi
 
     def calcPoints(self):
         refinement = 1

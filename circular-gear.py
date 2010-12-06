@@ -5,7 +5,7 @@ from math import sin,cos,pi,sqrt
 
 class circle (SLFMaker):
     def __init__(self, teeth, ts, oradius, iradius, depth, tolerance):
-
+        self.centerOffset = 0
         self.iradius = iradius # inner radius, for the hole
         self.oradius = oradius
         print "Circle"
@@ -38,6 +38,9 @@ class circle (SLFMaker):
     def perimeter(self):
         "Computes the perimeter of an ellipse using Ramanujan's approximation."
         return self.oradius*pi
+        
+    def width(self):
+        return self.outerradius(0)*2
 
 e = circle(20, 10, 1.0, 0.125, 0.2, 0.001)
 

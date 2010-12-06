@@ -67,7 +67,7 @@ outfile = ""
 
 def print_help():
     print("")
-    print("Usage: python {0} [ options ]".format(sys.argv[0]))
+    print("Usage: python %s [ options ]" % (sys.argv[0]))
     print("")
     print("")
     print("Options:")
@@ -283,11 +283,11 @@ if outfile != "":
         y2 = linedata[i*4 + 3]
         f.write("  0\nLINE\n")
         if layername != "":
-            f.write("  8\n{0}\n".format(layername))
-        f.write(" 10\n{0}\n".format(x1 + off_x))
-        f.write(" 20\n{0}\n".format(y1 + off_y))
-        f.write(" 11\n{0}\n".format(x2 + off_x))
-        f.write(" 21\n{0}\n".format(y2 + off_y))
+            f.write("  8\n %s \n" % (layername))
+        f.write(" 10\n%f\n" % (x1 + off_x))
+        f.write(" 20\n%f\n" % (y1 + off_y))
+        f.write(" 11\n%f\n" % (x2 + off_x))
+        f.write(" 21\n%f\n" % (y2 + off_y))
 
     if not e_mode:
         f.write("  0\nENDSEC\n")

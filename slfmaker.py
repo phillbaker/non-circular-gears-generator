@@ -69,6 +69,9 @@ class SLFMaker:
 
         print "teeth completed: ",
         
+        teeth_ends = []
+        inner_pts = []
+        #do this for each tooth:
         for d in self.teethLoc:
             rc = abs(d['rc'])
             inverseInvoluteTableY = []
@@ -150,13 +153,13 @@ class SLFMaker:
                 t += tt / (self.toothSlices-1.0)
                 m += 1
             
-            for i, v in enumerate(pts):
+            for i in range(0, len(pts)):
                 f.write("  0\nLINE\n")
                 f.write("  8\n %s \n" % ('gear')) #layername
                 if(i == 0):
-                    #for the first one, take the last point's last x and y
-                    f.write(" 10\n%f\n" % pts[-1][0][0])
-                    f.write(" 20\n%f\n" % pts[-1][0][1])
+                    #for the first one, we don't have much of a line
+                    f.write(" 10\n%f\n" % pts[i][0][0])
+                    f.write(" 20\n%f\n" % pts[i][0][1])
                 else:
                     f.write(" 10\n%f\n" % pts[i-1][0][0])
                     f.write(" 20\n%f\n" % pts[i-1][0][1])
@@ -164,17 +167,27 @@ class SLFMaker:
                 f.write(" 21\n%f\n" % pts[i][0][1])
                 
                 f.write("  0\nLINE\n")
-                f.write("  8\n %s \n" % ('gear')) #layername
+                f.write("  8\n %s \n" % ('gear'))
                 if(i == 0):
-                    #for the first one, take the last point's last x and y
-                    f.write(" 10\n%f\n" % pts[-1][1][0])
-                    f.write(" 20\n%f\n" % pts[-1][1][1])
+                    f.write(" 10\n%f\n" % pts[i][1][0])
+                    f.write(" 20\n%f\n" % pts[i][1][1])
                 else:
                     f.write(" 10\n%f\n" % pts[i-1][1][0])
                     f.write(" 20\n%f\n" % pts[i-1][1][1])
                 f.write(" 11\n%f\n" % pts[i][1][0])
                 f.write(" 21\n%f\n" % pts[i][1][1])
-
+            
+            #store the first two points to use to connect the teeth
+            teeth_ends.append((pts[0][0][0], pts[0][0][1], pts[0][1][0], pts[0][1][1],))
+            
+            #connect the last two points of the tip of the spur
+            f.write("  0\nLINE\n")
+            f.write("  8\n %s \n" % ('gear'))
+            f.write(" 10\n%f\n" % pts[-1][0][0])
+            f.write(" 20\n%f\n" % pts[-1][0][1])
+            f.write(" 11\n%f\n" % pts[-1][1][0])
+            f.write(" 21\n%f\n" % pts[-1][1][1])
+            
             #TODO need to figure out between tooth lines; maybe not, that should be tied together with the above...
 
             # tooth face (front)
@@ -212,13 +225,8 @@ class SLFMaker:
             #f.write("point fpi"+`n`+" ("+`xi`+" "+`yi`+" "+`self.depth`+" ) endpoint\n")
             # back
             #f.write("point bpi"+`n`+" ("+`xi`+" "+`yi`+" 0.0 ) endpoint\n")
-            f.write("  0\nLINE\n")
-            f.write("  8\n %s \n" % ('gear')) #layername
-            f.write(" 10\n%f\n" % (xi))
-            f.write(" 20\n%f\n" % (yi))
-            f.write(" 11\n%f\n" % (xi))
-            f.write(" 21\n%f\n" % (yi))
-
+            #store the inner points to create the inner radius
+            inner_pts.append((xi,yi,))
 
             # inner radius faces
             #f.write("face sif"+`n`+" (bpi"+`n`+" fpi"+`n`+" fpi"+`(n+1)%self.teethCount`+" bpi"+`(n+1)%self.teethCount`+") endface\n")
@@ -240,7 +248,34 @@ class SLFMaker:
             print n,
             
             n += 1
-
+        
+        #TODO this is the same process repeated twice, put it in a method and test it
+        #connect the inner radius
+        for i in range(0, len(inner_pts)):
+            f.write("  0\nLINE\n")
+            f.write("  8\n %s \n" % ('gear')) #layername
+            if(i == 0):
+                f.write(" 10\n%f\n" % inner_pts[-1][0])
+                f.write(" 20\n%f\n" % inner_pts[-1][1])
+            else:
+                f.write(" 10\n%f\n" % inner_pts[i-1][0])
+                f.write(" 20\n%f\n" % inner_pts[i-1][1])
+            f.write(" 11\n%f\n" % inner_pts[i][0])
+            f.write(" 21\n%f\n" % inner_pts[i][1])
+        
+        #connect the teeth
+        for i in range(0, len(teeth_ends)):
+            f.write("  0\nLINE\n")
+            f.write("  8\n %s \n" % ('gear')) #layername
+            if(i == 0):
+                f.write(" 10\n%f\n" % teeth_ends[-1][2])
+                f.write(" 20\n%f\n" % teeth_ends[-1][3])
+            else:
+                f.write(" 10\n%f\n" % teeth_ends[i-1][2])
+                f.write(" 20\n%f\n" % teeth_ends[i-1][3])
+            f.write(" 11\n%f\n" % teeth_ends[i][0])
+            f.write(" 21\n%f\n" % teeth_ends[i][1])
+        
         #f.write("# object\n")
 
         #print "\nassembling polygons into gear object"

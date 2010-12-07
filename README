@@ -1,16 +1,47 @@
 Non-circular Gear Generation Software
 
-+ History +
+Use
+===
+
+There are three super-classes (with much duplication), that are subclassed by several self-executable class. Touse them, just invoke the sub-classes from the command line (e.g. '$ python circular-gear.py').
+
+New sub-classes can also be created.
+
+
+History
+=======
 
 Based on work done by Jeff Schoner in his class CS285, Spring 2002 at
-UC Berkeley (http://www.cs.berkeley.edu/). http://decidedlyodd.com/cw/cs285/
+UC Berkeley (http://www.cs.berkeley.edu/). http://decidedlyodd.com/cw/cs285/.
+His code is published without license, since it is freely available for 8 years
+(as of this writing), it is assumed to be in the public domain.
 
-+ MODULES +
+This is also based on work done by Clifford Wolf <clifford@clifford.at>, gearsgen.py, at http://www.thingiverse.com/thing:829, licensed under the GNU, version 2 license.
+
+
+Disclaimer
+=========
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+
+
+Dependencies
+============
+
+* `Python 2.5 <http://python.org>`_
+
+
+License
+=======
+
+This is free software, available under the BSD license.
+
+
+MODULES
+=======
 
 There are three types of gears (and accordingly three libraries) that
-the system is capable of making. Each is self-executable, so that to 
-use them, just invoke them from the command line 
-(e.g. '$ python slfmaker.py').
+the system is capable of making. 
 
 slfmaker.py: This is for general gears.  Basically, you give it a
 shape, it gives you a dxf file.
@@ -24,7 +55,9 @@ that have an identical shape, but who's teeth are out of phase.  This
 module was born out of problems arising with elliptical gears that
 would only mesh when the teeth were out of phase with each other.
 
-+ EXAMPLE +
+
+EXAMPLE
+=======
 
 circular_gear.py: This just produces your standard circular gear.  It
 was mainly created as a sanity check for the software.  However, it
@@ -98,7 +131,9 @@ it.  Typically, you would pass any shape description values in here
 the filename you want the output saved to.  The SLFMaker will take
 care of the rest.
 
-+ OTHER EXAMPLES +
+
+OTHER EXAMPLES
+==============
 
 conj-oval-gear.py: Produces conjugate oval gears with arbitrary period
 ratios.

@@ -3,7 +3,7 @@
 from conj_slfmaker import ConjugateSLFMaker, ConjugateSLFMakerSphereTeeth
 from math import sin,cos,pi,sqrt
 
-class oval (ConjugateSLFMakerSphereTeeth):
+class oval (ConjugateSLFMaker):
     "Makes oval gears."
     def __init__(self, teeth, ts, a, e, nodes, period, holedistance, iradius, depth, tolerance):
         # various oval parameters
@@ -72,8 +72,8 @@ class oval (ConjugateSLFMakerSphereTeeth):
         h = ((self.a-self.b)/(self.a+self.b))**2.0
         return pi * (self.a+self.b) * (1.0+(3.0 * h)/(10.0+sqrt(4.0-3.0*h)))
 
-#e = oval(40, 10, 1.0, 0.15, 2, 2, 3.0, 0.0625, 0.25, 0.001)
-e = oval(20, 10, 1.0, 0.65, 1, 1, 2.0, 0.0625, 0.25, 0.001)
-e.write('ncgear3.slf')
+e = oval(40, 10, 1.0, 0.15, 2, 2, 3.0, 0.0625, 0.25, 0.001)
+#e = oval(20, 10, 1.0, 0.65, 1, 1, 2.0, 0.0625, 0.25, 0.001)
+e.write('ncgear1.dxf')
 #for x in range(1,9):
 #    print 2.0*pi/x, e.radiusOfCurvature(2.0*pi/x)

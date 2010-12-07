@@ -60,14 +60,9 @@ class SLFMaker:
         f.close()
 
     def amble(self, f):
-        """Takes the pointlist and produces the necessary SLIDE code for
+        """Takes the pointlist and produces the necessary dxf code for
         the points and the line they're in"""
         import string
-
-        f.write("### GEAR GEOMETRY ###\n")
-        f.write("### BASE GEOMETRY ###\n")
-
-        f.write("# points\n")
 
         n = 0
         inc = 0.01
@@ -128,7 +123,13 @@ class SLFMaker:
 
             t = 0.0
             m = 0
-            f.write("# tooth #"+`n`+"\n")
+            x_prev = None
+            y_prev = None
+            x_first = None
+            y_first = None
+            
+            #f.write("# tooth #"+`n`+"\n")
+            #do this twice, 
             while m < self.toothSlices:
                 ix, iy = involute(rc, t)
                 px = -offset+ix
@@ -138,19 +139,22 @@ class SLFMaker:
                 npy = px * -sin(rot) + py * cos(rot)
                 
                 # left side (front)
-                f.write("point fpt"+`n`+"_l"+`m`+" ("+ \
-                        `x+npx`+" " + \
-                        `y+npy`+" " + \
-                        `self.depth`+") endpoint\n")
+                #f.write("point fpt"+`n`+"_l"+`m`+" ("+ \
+                #        `x+npx`+" " + \
+                #        `y+npy`+" " + \
+                #        `self.depth`+") endpoint\n")
 
                 # (back)
-
-                f.write("point bpt"+`n`+"_l"+`m`+" ("+ \
-                        `x+npx`+" " + \
-                        `y+npy`+" " + \
-                        "0.0) endpoint\n")
-                # right side
+                #f.write("point bpt"+`n`+"_l"+`m`+" ("+ \
+                #        `x+npx`+" " + \
+                #        `y+npy`+" " + \
+                #        "0.0) endpoint\n")
+                f.write("  0\nLINE\n")
+                f.write("  8\n %s \n" % ('gear')) #layername
+                f.write(" 10\n%f\n" % (x + npx))
+                f.write(" 20\n%f\n" % (y + npy))
                 
+                # right side
                 px = offset-ix # flip left-hand side
                 py = iy
 
@@ -158,229 +162,113 @@ class SLFMaker:
                 npy = px * -sin(rot) + py * cos(rot)
 
                 # (front)
-                
-                f.write("point fpt"+`n`+"_r"+`m`+" ("+ \
-                        `x+npx`+" " + \
-                        `y+npy`+" " + \
-                        `self.depth`+") endpoint\n")
+                #f.write("point fpt"+`n`+"_r"+`m`+" ("+ \
+                #        `x+npx`+" " + \
+                #        `y+npy`+" " + \
+                #        `self.depth`+") endpoint\n")
 
                 # (back)
-
-                f.write("point bpt"+`n`+"_r"+`m`+" ("+ \
-                        `x+npx`+" " + \
-                        `y+npy`+" " + \
-                        "0.0) endpoint\n")
+                #f.write("point bpt"+`n`+"_r"+`m`+" ("+ \
+                #        `x+npx`+" " + \
+                #        `y+npy`+" " + \
+                #        "0.0) endpoint\n")
+                f.write(" 11\n%f\n" % (x + npx))
+                f.write(" 21\n%f\n" % (y + npy))
+                
                 t += tt / (self.toothSlices-1.0)
                 m += 1
 
             # tooth face (front)
-                
-            f.write("face fft"+`n`+" (")
-            for z in range(self.toothSlices):
-                f.write(" fpt"+`n`+"_r"+`z`+" ")
-            for z in range(self.toothSlices-1,-1,-1):
-                f.write(" fpt"+`n`+"_l"+`z`+" ")
-            f.write(") endface\n")
+            #f.write("face fft"+`n`+" (")
+            #for z in range(self.toothSlices):
+            #    f.write(" fpt"+`n`+"_r"+`z`+" ")
+            #for z in range(self.toothSlices-1,-1,-1):
+            #    f.write(" fpt"+`n`+"_l"+`z`+" ")
+            #f.write(") endface\n")
 
             # (back)
-
-            f.write("face bft"+`n`+" (")
-            for z in range(self.toothSlices):
-                f.write(" bpt"+`n`+"_l"+`z`+" ")
-            for z in range(self.toothSlices-1,-1,-1):
-                f.write(" bpt"+`n`+"_r"+`z`+" ")
-            f.write(") endface\n")
+            #f.write("face bft"+`n`+" (")
+            #for z in range(self.toothSlices):
+            #    f.write(" bpt"+`n`+"_l"+`z`+" ")
+            #for z in range(self.toothSlices-1,-1,-1):
+            #    f.write(" bpt"+`n`+"_r"+`z`+" ")
+            #f.write(") endface\n")
 
             # tooth sides
-
-            for z in range(self.toothSlices-1):
-                f.write("face soft"+`n`+"_l"+`z`+" ( bpt"+`n`+"_l"+`z`+" fpt"+`n`+"_l"+`z`+" fpt"+`n`+"_l"+`(z+1)`+" bpt"+`n`+"_l"+`(z+1)`+") endface\n")
-                f.write("face soft"+`n`+"_r"+`z`+" ( bpt"+`n`+"_r"+`z+1`+" fpt"+`n`+"_r"+`z+1`+" fpt"+`n`+"_r"+`z`+" bpt"+`n`+"_r"+`z`+") endface\n")
+            #for z in range(self.toothSlices-1):
+            #    f.write("face soft"+`n`+"_l"+`z`+" ( bpt"+`n`+"_l"+`z`+" fpt"+`n`+"_l"+`z`+" fpt"+`n`+"_l"+`(z+1)`+" bpt"+`n`+"_l"+`(z+1)`+") endface\n")
+            #    f.write("face soft"+`n`+"_r"+`z`+" ( bpt"+`n`+"_r"+`z+1`+" fpt"+`n`+"_r"+`z+1`+" fpt"+`n`+"_r"+`z`+" bpt"+`n`+"_r"+`z`+") endface\n")
 
             # tooth side (end)
-
-            f.write("face soft"+`n`+"_c ( bpt"+`n`+"_l"+`self.toothSlices-1`+" fpt"+`n`+"_l"+`self.toothSlices-1`+" fpt"+`n`+"_r"+`self.toothSlices-1`+" bpt"+`n`+"_r"+`self.toothSlices-1`+") endface\n")
+            #f.write("face soft"+`n`+"_c ( bpt"+`n`+"_l"+`self.toothSlices-1`+" fpt"+`n`+"_l"+`self.toothSlices-1`+" fpt"+`n`+"_r"+`self.toothSlices-1`+" bpt"+`n`+"_r"+`self.toothSlices-1`+") endface\n")
 
             # in between teeth (gap), on the outside
-
-            f.write("face sofg"+`n`+" ( fpt"+`(n+1)%self.teethCount`+"_r0 fpt"+`n`+"_l0 bpt"+`n`+"_l0 bpt"+`(n+1)%self.teethCount`+"_r0) endface\n")
+            #f.write("face sofg"+`n`+" ( fpt"+`(n+1)%self.teethCount`+"_r0 fpt"+`n`+"_l0 bpt"+`n`+"_l0 bpt"+`(n+1)%self.teethCount`+"_r0) endface\n")
             
             # inner point on inner axle
-
             ri = self.innerradius(d['t'])
             xi, yi = toCartesian(ri, d['t'])
 
             # front
-            f.write("point fpi"+`n`+" ("+`xi`+" "+`yi`+" "+`self.depth`+" ) endpoint\n")
+            #f.write("point fpi"+`n`+" ("+`xi`+" "+`yi`+" "+`self.depth`+" ) endpoint\n")
             # back
-            f.write("point bpi"+`n`+" ("+`xi`+" "+`yi`+" 0.0 ) endpoint\n")
+            #f.write("point bpi"+`n`+" ("+`xi`+" "+`yi`+" 0.0 ) endpoint\n")
+            f.write("  0\nLINE\n")
+            f.write("  8\n %s \n" % ('gear')) #layername
+            f.write(" 10\n%f\n" % (xi))
+            f.write(" 20\n%f\n" % (yi))
+            f.write(" 11\n%f\n" % (xi))
+            f.write(" 21\n%f\n" % (yi))
+
 
             # inner radius faces
-
-            f.write("face sif"+`n`+" (bpi"+`n`+" fpi"+`n`+" fpi"+`(n+1)%self.teethCount`+" bpi"+`(n+1)%self.teethCount`+") endface\n")
+            #f.write("face sif"+`n`+" (bpi"+`n`+" fpi"+`n`+" fpi"+`(n+1)%self.teethCount`+" bpi"+`(n+1)%self.teethCount`+") endface\n")
 
             # gap to inner radius face
-
             # front
-            f.write("face ffbi"+`n`+" ( fpi"+`(n+1)%self.teethCount`+" fpi"+`n`+" fpt"+`n`+"_l0 fpt"+`(n+1)%self.teethCount`+"_r0) endface\n")
+            #f.write("face ffbi"+`n`+" ( fpi"+`(n+1)%self.teethCount`+" fpi"+`n`+" fpt"+`n`+"_l0 fpt"+`(n+1)%self.teethCount`+"_r0) endface\n")
         
             # back
-            f.write("face fbbi"+`n`+" ( bpi"+`(n+1)%self.teethCount`+" bpt"+`(n+1)%self.teethCount`+"_r0 bpt"+`n`+"_l0 bpi"+`n`+" ) endface\n")
+            #f.write("face fbbi"+`n`+" ( bpi"+`(n+1)%self.teethCount`+" bpt"+`(n+1)%self.teethCount`+"_r0 bpt"+`n`+"_l0 bpi"+`n`+" ) endface\n")
+            
             # tooth to inner radius face
-
             # front
-            f.write("face ffbt"+`n`+" ( fpi"+`n`+" fpt"+`n`+"_r0 fpt"+`n`+"_l0) endface\n")
+            #f.write("face ffbt"+`n`+" ( fpi"+`n`+" fpt"+`n`+"_r0 fpt"+`n`+"_l0) endface\n")
             
             # back
-            f.write("face fbbt"+`n`+" ( bpi"+`n`+" bpt"+`n`+"_l0 bpt"+`n`+"_r0) endface\n")
+            #f.write("face fbbt"+`n`+" ( bpi"+`n`+" bpt"+`n`+"_l0 bpt"+`n`+"_r0) endface\n")
 
             print n,
             
             n += 1
 
-        f.write("# object\n")
+        #f.write("# object\n")
 
-        print "\nassembling polygons into gear object"
+        #print "\nassembling polygons into gear object"
 
-        f.write("object gear (")
-        for n in range(len(self.teethLoc)):
-            f.write(" fft"+`n`+" ffbi"+`n`+" ffbt"+`n`+" bft"+`n`+" fbbi"+`n`+" fbbt"+`n`+
-                    " sif"+`n`+" soft"+`n`+"_c sofg"+`n`+" ")
-            for z in range(self.toothSlices-1):
-                f.write(" soft"+`n`+"_l"+`z`+" soft"+`n`+"_r"+`z`+" ")
-        f.write(") endobject\n")
+        #f.write("object gear (")
+        #for n in range(len(self.teethLoc)):
+        #    f.write(" fft"+`n`+" ffbi"+`n`+" ffbt"+`n`+" bft"+`n`+" fbbi"+`n`+" fbbt"+`n`+
+        #            " sif"+`n`+" soft"+`n`+"_c sofg"+`n`+" ")
+        #    for z in range(self.toothSlices-1):
+        #        f.write(" soft"+`n`+"_l"+`z`+" soft"+`n`+"_r"+`z`+" ")
+        #f.write(") endobject\n")
 
-        f.write("### END BASE GEOMETRY ###\n")
-        f.write("### TEETH GEOMETRY ###\n")
-        f.write("### "+`len(self.teethLoc)`+" teeth\n")
+        #f.write("### END BASE GEOMETRY ###\n")
+        #f.write("### TEETH GEOMETRY ###\n")
+        #f.write("### "+`len(self.teethLoc)`+" teeth\n")
         
-        f.write("### END TEETH GEOMETRY ###\n")
-        f.write("### END GEAR GEOMETRY ###\n")
+        #f.write("### END TEETH GEOMETRY ###\n")
+        #f.write("### END GEAR GEOMETRY ###\n")
         
     def preamble(self,f):
-        f.write("""
-######################
-# ncgear.slf, generated by SLFMaker.py
-# Jeff Schoner
-######################
+        f.write("  999\nDXF created from gearsgen.py phill baker\n")
+        f.write("  0\nSECTION\n")
+        f.write("  2\nENTITIES\n")
 
-################## INITIALIZATIONS #########################
-
-###  Get some generic capabilities  ###
-tclinit { 
-  package require slideui
-  set rot 0
-}
-
-tclupdate {
-#  set rot [expr $rot+1]
-}
-
-
-###  Display window  ###
-tclinit { 
-  toplevel .slfWindow.gRoot
-  CreateSLIDEObjectObject gRoot
-  set widget [CreateSLIDEGroupUI .slfWindow.gRoot gRoot]
-  pack $widget
-}
- 
-
-### SURFACES ###
-
-surface sRed  color (1 0.3 0.3) endsurface
-surface sGrn  color (0.2 1 0.2) endsurface
-surface sBlu  color (0.3 0.3 1) endsurface
-surface sYel  color (1 0.8 0) endsurface
-
-""")
     def postamble(self,f):
-        width = self.width() / 2.0
-        f.write("""
-group gear1
-	instance gear
-		surface sBlu
-                shading SLF_FLAT
-	endinstance
-endgroup
-
-### Scene Assembly ###
-
-group gScene
-instance gear1
-    translate ("""+`self.centerOffset`+""" 0 0)
-endinstance
-#instance sgear
-#endinstance
-endgroup
-
-#################### 
-# CAMERA
-#################### 
-
-camera cam
-  projection SLF_PARALLEL
-  frustum (-"""+`width`+" -"+`width`+" -100) ("+`width`+" "+`width`+""" 100)
-endcamera
-
-group gCamera
-  instance cam
-    id instCam
-    translate ( 0.0 0.0 1 )
-  endinstance
-endgroup
-
-#################### 
-# LIGHT
-#################### 
-
-light lite
-  type SLF_DIRECTIONAL
-endlight
-
-group gLight
-  instance lite
-    id instLite
-
-    lookat
-      eye ( 1.0 1.0 1.0 )
-      target ( 0.0 0.0 0.0 )
-      up ( 0.0 1.0 0.0 )
-    endlookat
-
-  endinstance
-endgroup
-
-light lite2
-  type SLF_AMBIENT
-  color (0.5 0.5 0.5)
-endlight
-
-group gLight2
-  instance lite2
-    id instLite2
-  endinstance
-endgroup
-
-####################
-# RENDER
-####################
-
-window Window
-  background (0.3 0.6 0.9)
-endwindow
-
-viewport vp Window
-  origin ( 0.0 0.0 )
-  size ( 1.0 1.0 )
-endviewport
-
-render vp gCamera.instCam.cam gScene
-  light gLight.instLite.lite
-  light gLight2.instLite2.lite2
-endrender
-##########################################
-""")
+        f.write("  0\nENDSEC\n")
+        f.write("  0\nEOF\n")
 
     def radiusOfCurvature(self, t):
         dx = self.dx(t)

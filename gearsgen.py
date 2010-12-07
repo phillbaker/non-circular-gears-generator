@@ -272,6 +272,8 @@ if outfile != "":
     else:
         f = sys.stdout
 
+    f.write("  999\nDXF created from gearsgen.py phill baker\n")
+
     if not e_mode:
         f.write("  0\nSECTION\n")
         f.write("  2\nENTITIES\n")

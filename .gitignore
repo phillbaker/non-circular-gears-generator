@@ -1,4 +1,8 @@
 *.pyc
 *.slf
 *.dxf
+bin/*
+lib/*
+include/*
+.Python
 

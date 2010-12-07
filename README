@@ -1,22 +1,19 @@
-Jeff Schoner, CS285, Spring 2002
 Non-circular Gear Generation Software
-5/19/2002
 
-+ PREPARATION +
++ History +
 
-After copying the files to your system, make sure to change the first
-line, so that it points to a valid python implementation.  I've
-developed the software on version 2.2, but it should work any earlier
-version 2.x.  It doesn't work with 1.5, because of some syntax changes
-made in the language between 1.x and 2.x.
+Based on work done by Jeff Schoner in his class CS285, Spring 2002 at
+UC Berkeley (http://www.cs.berkeley.edu/). http://decidedlyodd.com/cw/cs285/
 
 + MODULES +
 
 There are three types of gears (and accordingly three libraries) that
-the system is capable of making:
+the system is capable of making. Each is self-executable, so that to 
+use them, just invoke them from the command line 
+(e.g. '$ python slfmaker.py').
 
 slfmaker.py: This is for general gears.  Basically, you give it a
-shape, it gives you a SLIDE file.
+shape, it gives you a dxf file.
 
 conj_slfmaker.py:  This produces a SLIDE file with two conjugate
 gears.  One is produced exactly from the description you specify.  The

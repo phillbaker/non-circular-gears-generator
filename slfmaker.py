@@ -123,13 +123,10 @@ class SLFMaker:
 
             t = 0.0
             m = 0
-            x_prev = None
-            y_prev = None
-            x_first = None
-            y_first = None
             
             #f.write("# tooth #"+`n`+"\n")
-            #do this twice, 
+            #iterate through and collect points
+            pts = []
             while m < self.toothSlices:
                 ix, iy = involute(rc, t)
                 px = -offset+ix
@@ -138,21 +135,7 @@ class SLFMaker:
                 npx = px * cos(rot) + py * sin(rot)
                 npy = px * -sin(rot) + py * cos(rot)
                 
-                # left side (front)
-                #f.write("point fpt"+`n`+"_l"+`m`+" ("+ \
-                #        `x+npx`+" " + \
-                #        `y+npy`+" " + \
-                #        `self.depth`+") endpoint\n")
-
-                # (back)
-                #f.write("point bpt"+`n`+"_l"+`m`+" ("+ \
-                #        `x+npx`+" " + \
-                #        `y+npy`+" " + \
-                #        "0.0) endpoint\n")
-                f.write("  0\nLINE\n")
-                f.write("  8\n %s \n" % ('gear')) #layername
-                f.write(" 10\n%f\n" % (x + npx))
-                f.write(" 20\n%f\n" % (y + npy))
+                arr = [(x + npx, y + npy,)]
                 
                 # right side
                 px = offset-ix # flip left-hand side
@@ -160,23 +143,39 @@ class SLFMaker:
 
                 npx = px * cos(rot) + py * sin(rot)
                 npy = px * -sin(rot) + py * cos(rot)
-
-                # (front)
-                #f.write("point fpt"+`n`+"_r"+`m`+" ("+ \
-                #        `x+npx`+" " + \
-                #        `y+npy`+" " + \
-                #        `self.depth`+") endpoint\n")
-
-                # (back)
-                #f.write("point bpt"+`n`+"_r"+`m`+" ("+ \
-                #        `x+npx`+" " + \
-                #        `y+npy`+" " + \
-                #        "0.0) endpoint\n")
-                f.write(" 11\n%f\n" % (x + npx))
-                f.write(" 21\n%f\n" % (y + npy))
                 
+                arr.append((x + npx, y + npy,))
+                
+                pts.append(arr)
                 t += tt / (self.toothSlices-1.0)
                 m += 1
+            
+            for i, v in enumerate(pts):
+                f.write("  0\nLINE\n")
+                f.write("  8\n %s \n" % ('gear')) #layername
+                if(i == 0):
+                    #for the first one, take the last point's last x and y
+                    f.write(" 10\n%f\n" % pts[-1][0][0])
+                    f.write(" 20\n%f\n" % pts[-1][0][1])
+                else:
+                    f.write(" 10\n%f\n" % pts[i-1][0][0])
+                    f.write(" 20\n%f\n" % pts[i-1][0][1])
+                f.write(" 11\n%f\n" % pts[i][0][0])
+                f.write(" 21\n%f\n" % pts[i][0][1])
+                
+                f.write("  0\nLINE\n")
+                f.write("  8\n %s \n" % ('gear')) #layername
+                if(i == 0):
+                    #for the first one, take the last point's last x and y
+                    f.write(" 10\n%f\n" % pts[-1][1][0])
+                    f.write(" 20\n%f\n" % pts[-1][1][1])
+                else:
+                    f.write(" 10\n%f\n" % pts[i-1][1][0])
+                    f.write(" 20\n%f\n" % pts[i-1][1][1])
+                f.write(" 11\n%f\n" % pts[i][1][0])
+                f.write(" 21\n%f\n" % pts[i][1][1])
+
+            #TODO need to figure out between tooth lines; maybe not, that should be tied together with the above...
 
             # tooth face (front)
             #f.write("face fft"+`n`+" (")

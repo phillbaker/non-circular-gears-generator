@@ -268,13 +268,13 @@ class SLFMaker:
             f.write("  0\nLINE\n")
             f.write("  8\n %s \n" % ('gear')) #layername
             if(i == 0):
-                f.write(" 10\n%f\n" % teeth_ends[-1][2])
-                f.write(" 20\n%f\n" % teeth_ends[-1][3])
+                f.write(" 10\n%f\n" % teeth_ends[-1][0])
+                f.write(" 20\n%f\n" % teeth_ends[-1][1])
             else:
-                f.write(" 10\n%f\n" % teeth_ends[i-1][2])
-                f.write(" 20\n%f\n" % teeth_ends[i-1][3])
-            f.write(" 11\n%f\n" % teeth_ends[i][0])
-            f.write(" 21\n%f\n" % teeth_ends[i][1])
+                f.write(" 10\n%f\n" % teeth_ends[i-1][0])
+                f.write(" 20\n%f\n" % teeth_ends[i-1][1])
+            f.write(" 11\n%f\n" % teeth_ends[i][2])
+            f.write(" 21\n%f\n" % teeth_ends[i][3])
         
         #f.write("# object\n")
 
